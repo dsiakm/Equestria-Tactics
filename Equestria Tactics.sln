@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{BF08E9A3-274A-3F06-36DC-CAD20E6EC622}") = "Equestria Tactics", "Assembly-CSharp.csproj", "{98DEEE0F-0577-376A-DE93-50B204945665}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{98DEEE0F-0577-376A-DE93-50B204945665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98DEEE0F-0577-376A-DE93-50B204945665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98DEEE0F-0577-376A-DE93-50B204945665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98DEEE0F-0577-376A-DE93-50B204945665}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
