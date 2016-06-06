@@ -93,6 +93,7 @@ public class Grid : MonoBehaviour {
 				grid [x, y] = new Node (walkable, worldPoint,x,y);
 				GameObject go = (GameObject)Instantiate (grassPrefab, worldPoint, Quaternion.identity);
 				go.GetComponent<ClickableNode> ().setXY (x, y);
+				go.transform.SetParent (GameObject.Find("Plane").transform, true);
 			}
 		}
 	}

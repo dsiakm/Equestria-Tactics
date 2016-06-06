@@ -2,9 +2,10 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Battle/RoundManager.cs">
     <Files>
-      <File FileName="Assets/tutorial2/Assets/CameraDrag.cs" Line="1" Column="1" />
-      <File FileName="Assets/tutorial2/Assets/MoveCube.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Battle/RoundManager.cs" Line="36" Column="18" />
+      <File FileName="Assets/Scripts/Battle/RoundManager.cs" Line="86" Column="78" />
+      <File FileName="Assets/Scripts/Battle/MoveButtomControl.cs" Line="6" Column="1" />
+      <File FileName="Assets/Scripts/Battle/EndTurnButtomControl.cs" Line="11" Column="28" />
+      <File FileName="Assets/Scripts/Units/Hero.cs" Line="24" Column="16" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
