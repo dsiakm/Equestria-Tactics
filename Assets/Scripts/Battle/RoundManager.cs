@@ -8,6 +8,7 @@ public class RoundManager : MonoBehaviour {
 	List<Node> path;
 	public List<Hero> heroList;
 	public GameObject moveButtom;
+	public GameObject LifeBar;
 	public Hero activeHero;
 	public Pathfinder pf;
 	public Grid grid;
@@ -18,6 +19,7 @@ public class RoundManager : MonoBehaviour {
 		activeCamera = Camera.current;
 		ReceiveListOfHeroes ();
 		ReceiveListOfEnemies ();
+		InitializeLifeBars ();
 	}
 
 	void ReceiveListOfHeroes(){
@@ -26,6 +28,19 @@ public class RoundManager : MonoBehaviour {
 
 	void ReceiveListOfEnemies(){
 	
+	}
+
+	void InitializeLifeBars (){
+		Vector3 pos = new Vector3 (40,-40,0);
+		for(int i = 0; i<heroList.Count;i++){
+			GameObject go = (GameObject)Instantiate (LifeBar, pos, Quaternion.identity);
+			pos = new Vector3 (40, pos.y - 80, 0);
+			go.transform.SetParent (GameObject.Find("Canvas").transform, false);
+			go.SendMessage ("SetAvatar", heroList[i].avatar);
+			go.SendMessage ("SetAP", heroList[i].totalAP);
+			go.SendMessage ("SetMP", heroList[i].totalMP);
+
+		}
 	}
 	
 	// Update is called once per frame

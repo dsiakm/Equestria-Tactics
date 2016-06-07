@@ -1,11 +1,10 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Battle/RoundManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Battle/LifeBarControl.cs">
     <Files>
-      <File FileName="Assets/Scripts/Battle/RoundManager.cs" Line="86" Column="78" />
-      <File FileName="Assets/Scripts/Battle/MoveButtomControl.cs" Line="6" Column="1" />
-      <File FileName="Assets/Scripts/Battle/EndTurnButtomControl.cs" Line="11" Column="28" />
-      <File FileName="Assets/Scripts/Units/Hero.cs" Line="24" Column="16" />
+      <File FileName="Assets/Scripts/Battle/RoundManager.cs" Line="41" Column="40" />
+      <File FileName="Assets/Scripts/Battle/LifeBarControl.cs" Line="14" Column="69" />
+      <File FileName="Assets/Scripts/Grid/ClickableNode.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

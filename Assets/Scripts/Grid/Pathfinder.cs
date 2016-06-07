@@ -67,4 +67,42 @@ public class Pathfinder : MonoBehaviour {
 
 		return dstX + dstY;
 	}
+
+	public bool hasLineOfSight(Node startNode, Node targetNode, bool ignoreWall, int castRange){
+		Node currentNode; int x=0, y = 0;
+		List<Node> los = new List<Node>();
+
+
+		currentNode = startNode;
+		x = currentNode.gridX;
+		y = currentNode.gridY;
+		while (currentNode != targetNode){
+			if (currentNode.gridX < targetNode.gridX) {
+				x++;
+			} else {
+				x--;
+			}
+			if (currentNode.gridY < targetNode.gridY) {
+				y++;
+			} else {
+				y--;
+			}
+
+			currentNode = grid.NodeInXY (x, y);
+			los.Add (currentNode);
+		}
+
+		if (los.Count > castRange) {
+			return false;
+		}
+		if (ignoreWall) {
+			return true;
+		}
+		for(int i=0; i<los.Count;i++){
+			if (!los[i].walkable){
+				return false;
+			}
+		}
+		return true;
+	}
 }
