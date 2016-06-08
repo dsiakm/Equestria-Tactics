@@ -15,6 +15,9 @@ public class GreatBarControl : MonoBehaviour {
 	public void SetMP(int MP){
 		transform.GetChild (3).GetChild (0).GetComponent<Text> ().text = "" + MP;
 	}
+	public void SetFill(float i){
+		transform.GetChild (1).GetChild (0).GetComponent<Image> ().fillAmount = i;
+	}
 	public void SetSkillBar(Hero hero){
 		Destroy (GameObject.Find("s1"));
 		Destroy (GameObject.Find("s2"));

@@ -50,7 +50,6 @@ public class RoundManager : MonoBehaviour {
 		if (newTurn) {
 			updateCamera ();
 			updateGUI ();
-			updateGreatBar ();
 			newTurn = false;
 		}
 		if (moveHero) {
@@ -99,6 +98,7 @@ public class RoundManager : MonoBehaviour {
 			moveHero = false;
 			path = null;
 			activateMoveButton (false);
+
 			return;
 		}
 		activeHero.gridPosX = path [0].gridX; activeHero.gridPosY = path [0].gridY;
@@ -112,6 +112,11 @@ public class RoundManager : MonoBehaviour {
 
 		//Implement teleport to righ pos here
 		activeHero.transform.position = path[0].worldPosition;
+		activeHero.mp -= 1;
+		activeHero.hitPoints -= 1;
+		GameObject.Find (activeHero.heroName+"LifeBar").SendMessage("SetMP", (activeHero.mp));
+		GameObject.Find ("GreatBar").SendMessage ("SetMP", activeHero.mp);
+
 
 		path.RemoveAt (0);
 	}
@@ -151,6 +156,20 @@ public class RoundManager : MonoBehaviour {
 		}
 	}
 	void updateGUI(){
+		for(int i = 0; i<heroList.Count;i++){
+			GameObject go = GameObject.Find (heroList[i].heroName+"LifeBar");
+			go.SendMessage ("SetAP", heroList[i].totalAP);
+			go.SendMessage ("SetMP", heroList[i].totalMP);
+			float a = heroList [i].hitPoints; float b = heroList [i].totalHitPoints;
+			go.SendMessage ("SetFill", (a/b));
+
+			if (HeroTurn ()) {
+				//GreatBar.GetComponent<Canvas> ().enabled = true;
+				updateGreatBar ();
+			} else {
+				//GreatBar.GetComponent<Canvas> ().enabled = false;
+			}
+		}
 	}
 	void updateGreatBar(){
 		if(!HeroTurn()){
@@ -160,6 +179,8 @@ public class RoundManager : MonoBehaviour {
 		GreatBar.SendMessage ("SetAvatar", activeHero.avatar);
 		GreatBar.SendMessage ("SetAP", activeHero.ap);
 		GreatBar.SendMessage ("SetMP", activeHero.mp);
+		float a = activeHero.hitPoints; float b = activeHero.totalHitPoints;
+		GreatBar.SendMessage ("SetFill", (a/b));
 		GreatBar.SendMessage ("SetSkillBar", activeHero);
 	}
 	bool HeroTurn(){
@@ -170,4 +191,8 @@ public class RoundManager : MonoBehaviour {
 	}
 
 	//TURN MANAGEMENT END
+
+	//CONSTANT ADJUSTMENTS START
+
+	//CONSTANT ADJUSTMENTS END
 }
