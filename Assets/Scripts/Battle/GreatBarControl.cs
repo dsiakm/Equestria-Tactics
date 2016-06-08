@@ -37,6 +37,7 @@ public class GreatBarControl : MonoBehaviour {
 			skillButtom.GetComponent<Skill> ().phaseWall = hero.skillList [i].phaseWall;
 			skillButtom.GetComponent<Skill> ().skillIcon = hero.skillList [i].skillIcon;
 			skillButtom.GetComponent<RawImage> ().texture = hero.skillList [i].skillIcon;
+			skillButtom.GetComponent<Skill> ().tooltip = hero.skillList [i].tooltip;
 		}	
 	}
 

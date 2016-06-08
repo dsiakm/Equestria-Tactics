@@ -1,11 +1,12 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Battle/RoundManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Battle/SkillButtomControl.cs">
     <Files>
-      <File FileName="Assets/Scripts/Battle/RoundManager.cs" Line="168" Column="4" />
-      <File FileName="Assets/Scripts/Battle/LifeBarControl.cs" Line="3" Column="1" />
-      <File FileName="Assets/Scripts/Battle/GreatBarControl.cs" Line="27" Column="30" />
-      <File FileName="Assets/Scripts/Units/Hero.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Battle/RoundManager.cs" Line="182" Column="25" />
+      <File FileName="Assets/Scripts/Battle/SkillButtomControl.cs" Line="32" Column="15" />
+      <File FileName="Assets/Scripts/Battle/Skills/Skill.cs" Line="18" Column="26" />
+      <File FileName="Assets/Scripts/Units/AppleJackSetter.cs" Line="30" Column="83" />
+      <File FileName="Assets/Scripts/Battle/GreatBarControl.cs" Line="40" Column="46" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

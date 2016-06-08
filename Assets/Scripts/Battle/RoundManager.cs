@@ -167,7 +167,7 @@ public class RoundManager : MonoBehaviour {
 				//GreatBar.GetComponent<Canvas> ().enabled = true;
 				updateGreatBar ();
 			} else {
-				//GreatBar.GetComponent<Canvas> ().enabled = false;
+				GreatBar.GetComponent<Canvas> ().enabled = false;
 			}
 		}
 	}
