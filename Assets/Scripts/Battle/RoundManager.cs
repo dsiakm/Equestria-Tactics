@@ -9,6 +9,7 @@ public class RoundManager : MonoBehaviour {
 	public List<Hero> heroList;
 	public GameObject moveButtom;
 	public GameObject LifeBar;
+	GameObject GreatBar;
 	public Hero activeHero;
 	public Pathfinder pf;
 	public Grid grid;
@@ -17,6 +18,7 @@ public class RoundManager : MonoBehaviour {
 
 	void Start(){
 		activeCamera = Camera.current;
+		GreatBar = GameObject.Find ("GreatBar");
 		ReceiveListOfHeroes ();
 		ReceiveListOfEnemies ();
 		InitializeLifeBars ();
@@ -39,15 +41,16 @@ public class RoundManager : MonoBehaviour {
 			go.SendMessage ("SetAvatar", heroList[i].avatar);
 			go.SendMessage ("SetAP", heroList[i].totalAP);
 			go.SendMessage ("SetMP", heroList[i].totalMP);
+			go.name = heroList[i].heroName+"LifeBar";
 
 		}
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		if (newTurn) {
 			updateCamera ();
 			updateGUI ();
+			updateGreatBar ();
 			newTurn = false;
 		}
 		if (moveHero) {
@@ -149,8 +152,21 @@ public class RoundManager : MonoBehaviour {
 	}
 	void updateGUI(){
 	}
+	void updateGreatBar(){
+		if(!HeroTurn()){
+			return;
+		}
+
+		GreatBar.SendMessage ("SetAvatar", activeHero.avatar);
+		GreatBar.SendMessage ("SetAP", activeHero.ap);
+		GreatBar.SendMessage ("SetMP", activeHero.mp);
+		GreatBar.SendMessage ("SetSkillBar", activeHero);
+	}
 	bool HeroTurn(){
-		return true;
+		if (activeHero != null) {
+			return true;
+		}
+		return false;
 	}
 
 	//TURN MANAGEMENT END

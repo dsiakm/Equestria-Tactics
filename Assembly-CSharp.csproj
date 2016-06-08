@@ -46,14 +46,16 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Battle\EndTurnButtomControl.cs" />
+     <Compile Include="Assets\Scripts\Battle\GreatBarControl.cs" />
      <Compile Include="Assets\Scripts\Battle\LifeBarControl.cs" />
      <Compile Include="Assets\Scripts\Battle\MoveButtomControl.cs" />
      <Compile Include="Assets\Scripts\Battle\RoundManager.cs" />
+     <Compile Include="Assets\Scripts\Battle\Skills\Skill.cs" />
      <Compile Include="Assets\Scripts\Grid\ClickableNode.cs" />
      <Compile Include="Assets\Scripts\Grid\Grid.cs" />
      <Compile Include="Assets\Scripts\Grid\Node.cs" />
      <Compile Include="Assets\Scripts\Grid\Pathfinder.cs" />
-     <Compile Include="Assets\Scripts\Raycaster.cs" />
+     <Compile Include="Assets\Scripts\Units\AppleJackSetter.cs" />
      <Compile Include="Assets\Scripts\Units\Hero.cs" />
      <Compile Include="Assets\tutorial\Assets\scripts\ClickableTile.cs" />
      <Compile Include="Assets\tutorial\Assets\scripts\TileMap.cs" />
