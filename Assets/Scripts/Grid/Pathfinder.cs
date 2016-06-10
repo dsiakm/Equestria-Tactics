@@ -50,6 +50,60 @@ public class Pathfinder : MonoBehaviour {
 		return null;
 	}
 
+	public List<Node> FindEnemyPath(Node startNode, Node targettNode){
+		//target node must be -1 from destiny, and the closest one to the target
+		int posx = targettNode.gridX, posy = targettNode.gridY;
+		if (startNode.gridX < targettNode.gridX) {
+			posx -= 1;
+		} else if (startNode.gridX > targettNode.gridX){
+			posx += 1;
+		}
+		else if (startNode.gridY < targettNode.gridY) {
+			posy -= 1;
+		} else if (startNode.gridY > targettNode.gridY){
+			posy += 1;
+		}
+
+		Node targetNode = grid.NodeInXY (posx,posy);
+
+		List<Node> openSet = new List<Node> ();
+		HashSet<Node> closedSet = new HashSet<Node> ();
+		openSet.Add (startNode);
+		while (openSet.Count > 0) {
+			Node currentNode = openSet [0];
+			for (int i = 1; i < openSet.Count; i++) {
+				if (openSet [i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost) {
+					currentNode = openSet [i];
+				}
+			}
+
+			openSet.Remove (currentNode);
+			closedSet.Add (currentNode);
+
+			if (currentNode == targetNode) {
+				return RetracePath (startNode, targetNode);
+			}
+
+			foreach (Node neighbour in grid.GetNeighbours(currentNode)) {
+				if (!neighbour.walkable || closedSet.Contains (neighbour)) {
+					continue;
+				}
+
+				int newMovementCostToNeighbour = currentNode.gCost + GetDistance (currentNode, neighbour);
+				if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains (neighbour)) {
+					neighbour.gCost = newMovementCostToNeighbour;
+					neighbour.hCost = GetDistance (neighbour, targetNode);
+					neighbour.parent = currentNode;
+
+					if (!openSet.Contains (neighbour)) {
+						openSet.Add (neighbour);
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 	List<Node> RetracePath(Node startNode, Node endNode){
 		List<Node> path = new List<Node> ();
 		Node currentNode = endNode;
@@ -104,5 +158,15 @@ public class Pathfinder : MonoBehaviour {
 			}
 		}
 		return true;
+	}
+
+	public bool isMeele(Node a, Node b){
+		int calc = (a.gridX - b.gridX) + (a.gridY - b.gridY);
+		Debug.Log ("Calc = "+calc);
+		if(calc == 1 || calc == -1){
+			return true;
+		}
+
+		return false;
 	}
 }

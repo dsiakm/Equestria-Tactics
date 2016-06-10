@@ -7,13 +7,11 @@ public class Hero : MonoBehaviour {
 	//to me called by the GUI to display the life bar
 	public Texture avatar;
 	public List<Skill> skillList = new List<Skill>();
-	public int hitPoints, totalHitPoints, ap, totalAP, mp, totalMP, init, worldPosX, worldPosY, worldPosZ, gridPosX, gridPosY;
+	public int hitPoints, totalHitPoints, ap, totalAP, mp, totalMP, init, gridPosX, gridPosY;
 
-	//What grid is this hero on right now?
-	public Grid grid;
 
-	void Update(){
-	}
+
+
 
 	public void resetAPMP(){
 		ap = totalAP;

@@ -13,7 +13,8 @@ public class ClickableNode : MonoBehaviour, IPointerClickHandler {
 
 	#region IPointerClickHandler implementation
 	public void OnPointerClick (PointerEventData eventData){
-		Debug.Log ("hOI, Temmie is at x:"+gridX+" y:"+gridY);
+		//Debug.Log ("hOI, distance is:"+Vector2.Distance(new Vector2(1,1),new Vector2(gridX,gridY)));
+		Debug.Log ("hOI, x: "+gridX+" y: "+gridY);
 		GameObject.Find ("Judge").SendMessage ("ReceiveMove", new Vector2(gridX, gridY));
 	}
 	#endregion

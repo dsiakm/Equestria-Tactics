@@ -7,14 +7,19 @@ public class RoundManager : MonoBehaviour {
 	public Camera activeCamera;
 	List<Node> path;
 	public List<Hero> heroList;
+	public List<Enemy> enemyList;
 	public GameObject moveButtom;
 	public GameObject LifeBar;
 	GameObject GreatBar;
 	public Hero activeHero;
+	public Enemy activeEnemy;
 	public Pathfinder pf;
 	public Grid grid;
 	bool newTurn = true; 
 	bool moveHero = false;
+
+	//state machine aux variables
+	int stateMach;
 
 	void Start(){
 		activeCamera = Camera.current;
@@ -54,6 +59,9 @@ public class RoundManager : MonoBehaviour {
 		}
 		if (moveHero) {
 			MoveHero ();		
+		}
+		if (activeEnemy!=null){
+			EnemyStateMachine ();
 		}
 		paintTheWay (path);
 	}
@@ -101,7 +109,7 @@ public class RoundManager : MonoBehaviour {
 
 			return;
 		}
-		activeHero.gridPosX = path [0].gridX; activeHero.gridPosY = path [0].gridY;
+		//activeHero.gridPosX = path [0].gridX; activeHero.gridPosY = path [0].gridY;
 		activeHero.transform.position = Vector3.Lerp (activeHero.transform.position,path[0].worldPosition, 5f * Time.deltaTime);
 		if (Vector3.Distance(activeHero.transform.position, path[0].worldPosition)<0.1f){
 			AdvancePathing ();
@@ -112,8 +120,8 @@ public class RoundManager : MonoBehaviour {
 
 		//Implement teleport to righ pos here
 		activeHero.transform.position = path[0].worldPosition;
+		activeHero.gridPosX = path [0].gridX; activeHero.gridPosY = path [0].gridY;
 		activeHero.mp -= 1;
-		activeHero.hitPoints -= 1;
 		GameObject.Find (activeHero.heroName+"LifeBar").SendMessage("SetMP", (activeHero.mp));
 		GameObject.Find ("GreatBar").SendMessage ("SetMP", activeHero.mp);
 
@@ -121,6 +129,50 @@ public class RoundManager : MonoBehaviour {
 		path.RemoveAt (0);
 	}
 	//HERO MOVE SECTION END
+
+	//ENEMY TURN SECTION START
+
+	//Ask the Enemy what he will do
+	//Act accordly, using the info store in the enemy
+	//Ask again
+	void EnemyStateMachine(){
+
+		//Ask the AI what to do.
+		if(stateMach == 0){
+			Debug.Log ("Stato 0");
+			stateMach = activeEnemy.AskAI (heroList);
+		}
+		//Moving state
+		else if(stateMach == 1){
+			Debug.Log ("Stato 1");
+			EnemyMove ();
+		}
+		else if(stateMach == -1){
+			Debug.Log ("ff");
+			EndEnemyTurn ();
+		}
+	}
+	void EnemyMove(){
+		if (activeEnemy.path.Count == 0 || activeEnemy.mp == 0) {
+			stateMach = 0;
+			activeEnemy.path = null;
+
+			return;
+		}
+		activeEnemy.gridPosX = activeEnemy.path [0].gridX;
+		activeEnemy.gridPosY = activeEnemy.path [0].gridY;
+		activeEnemy.transform.position = Vector3.Lerp (activeEnemy.transform.position,activeEnemy.path[0].worldPosition, 5f * Time.deltaTime);
+		if (Vector3.Distance(activeEnemy.transform.position, activeEnemy.path[0].worldPosition)<0.1f){
+			activeEnemy.transform.position = activeEnemy.path[0].worldPosition;
+			activeEnemy.mp -= 1;
+
+			activeEnemy.path.RemoveAt (0);
+		}
+
+	}
+	void EnemyAct(){
+	}
+	//ENEMY TURN SECTION END
 
 	//TURN MANAGEMENT START
 
@@ -133,19 +185,29 @@ public class RoundManager : MonoBehaviour {
 		//this put the hero who just had her turn to the end of the list
 		heroList.Remove (activeHero);
 		heroList.Add (activeHero);
-		activeHero = null;
 		nextInLine (true);
-		newTurn = true;
 	}
 
 	void nextInLine(bool wasHero){
+		newTurn = true;
 		//If it was a hero who ended his turn last time, then a Unit will be made active, otherwise
-
-		//DELETE THE NEGATION, IT WAS FOR A TEST
-		if (!wasHero) {
+		if (wasHero) {
+			activeHero = null;
+			activeEnemy = enemyList [0];
+			stateMach = 0;
 		} else {
 			activeHero = heroList[0];
+			activeEnemy = null;
+			stateMach = 0;
 		}
+	}
+
+	void EndEnemyTurn(){
+		activeEnemy.resetAPMP ();
+		enemyList.Remove (activeEnemy);
+		enemyList.Add (activeEnemy);
+		stateMach = 0;
+		nextInLine (false);
 	}
 
 	void updateCamera(){
@@ -164,10 +226,10 @@ public class RoundManager : MonoBehaviour {
 			go.SendMessage ("SetFill", (a/b));
 
 			if (HeroTurn ()) {
-				//GreatBar.GetComponent<Canvas> ().enabled = true;
+				GreatBar.GetComponent<RectTransform> ().position = new Vector3 (637, 49.7f,0);
 				updateGreatBar ();
 			} else {
-				GreatBar.GetComponent<Canvas> ().enabled = false;
+				GreatBar.gameObject.transform.position = new Vector3(700,700,0);
 			}
 		}
 	}

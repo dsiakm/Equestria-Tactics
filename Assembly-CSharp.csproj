@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Battle\AI.cs" />
      <Compile Include="Assets\Scripts\Battle\EndTurnButtomControl.cs" />
      <Compile Include="Assets\Scripts\Battle\GreatBarControl.cs" />
      <Compile Include="Assets\Scripts\Battle\LifeBarControl.cs" />
@@ -57,7 +58,9 @@
      <Compile Include="Assets\Scripts\Grid\Node.cs" />
      <Compile Include="Assets\Scripts\Grid\Pathfinder.cs" />
      <Compile Include="Assets\Scripts\Units\AppleJackSetter.cs" />
+     <Compile Include="Assets\Scripts\Units\Enemy.cs" />
      <Compile Include="Assets\Scripts\Units\Hero.cs" />
+     <Compile Include="Assets\Scripts\Units\TimberwolfSetter.cs" />
      <Compile Include="Assets\tutorial\Assets\scripts\ClickableTile.cs" />
      <Compile Include="Assets\tutorial\Assets\scripts\TileMap.cs" />
      <Compile Include="Assets\tutorial\Assets\scripts\TileType.cs" />
