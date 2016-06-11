@@ -36,12 +36,11 @@ public class AI : MonoBehaviour {
 
 		Node nodeEnemy = grid.NodeInXY (enemy.gridPosX, enemy.gridPosY);
 		Node nodeHero = grid.NodeInXY (enemy.targetHero.gridPosX, enemy.targetHero.gridPosY);
-		Debug.Log ("Hero: "+enemy.targetHero.heroName+" is at: "+nodeHero.gridX+" "+nodeHero.gridY
-			+" Timber MP: "+enemy.mp+ " Timber is at :"+nodeEnemy.gridX+" "+nodeEnemy.gridY);
+		//Debug.Log ("Hero: "+enemy.targetHero.heroName+" is at: "+nodeHero.gridX+" "+nodeHero.gridY
+		//	+" Timber MP: "+enemy.mp+ " Timber is at :"+nodeEnemy.gridX+" "+nodeEnemy.gridY);
 
 		//if not in meele range to the closest enemy, walk as close as possible
 		if(enemy.mp > 0 && !pf.isMeele(nodeEnemy, nodeHero)){
-			Debug.Log ("I'M TELLING ITS NOT MEELEEEEEE "+ pf.isMeele(nodeEnemy, nodeHero));
 			enemy.path = pf.FindEnemyPath (nodeEnemy, nodeHero);
 			//path is set now tell the Judge to move your piece until your mp runs out!
 			return 1;

@@ -50,21 +50,111 @@ public class Pathfinder : MonoBehaviour {
 		return null;
 	}
 
-	public List<Node> FindEnemyPath(Node startNode, Node targettNode){
-		//target node must be -1 from destiny, and the closest one to the target
+	Vector2 chooseAdjacent(Node startNode, Node targettNode){
 		int posx = targettNode.gridX, posy = targettNode.gridY;
+
+		//If is best to aproach by the left...
 		if (startNode.gridX < targettNode.gridX) {
-			posx -= 1;
-		} else if (startNode.gridX > targettNode.gridX){
-			posx += 1;
+			//And the tile is available!
+			if (grid.NodeInXY (posx - 1, posy).walkable) {
+				posx -= 1;
+			}
+			//if is not, ill try up, down then the opposite direction right
+			else {
+				//try up
+				if (grid.NodeInXY (posx, posy+1).walkable){
+					posy += 1;
+				}
+				//if impossible try down
+				else if(grid.NodeInXY (posx, posy-1).walkable){
+					posy -= 1;
+				}
+				//if impossible try right
+				else if(grid.NodeInXY (posx + 1, posy).walkable){
+					posx += 1;				
+				}
+				//if all this fails it means the hero is surrounded, not aproaching is fine rly
+			}
+		} 
+		//if is best to aproach by the right
+		else if (startNode.gridX > targettNode.gridX && grid.NodeInXY(posx+1,posy).walkable){
+			//And the tile is available!
+			if (grid.NodeInXY (posx + 1, posy).walkable) {
+				posx += 1;
+			}
+			//if is not, ill try up, down then the opposite direction left
+			else {
+				//try up
+				if (grid.NodeInXY (posx, posy+1).walkable){
+					posy += 1;
+				}
+				//if impossible try down
+				else if(grid.NodeInXY (posx, posy-1).walkable){
+					posy -= 1;
+				}
+				//if impossible try left
+				else if(grid.NodeInXY (posx - 1, posy).walkable){
+					posx -= 1;				
+				}
+				//if all this fails it means the hero is surrounded, not aproaching is fine rly
+			}
 		}
-		else if (startNode.gridY < targettNode.gridY) {
-			posy -= 1;
-		} else if (startNode.gridY > targettNode.gridY){
-			posy += 1;
+		//if is best to aproach from below
+		else if (startNode.gridY < targettNode.gridY && grid.NodeInXY(posx,posy-1).walkable) {
+			//And the tile is available!
+			if (grid.NodeInXY (posx, posy-1).walkable) {
+				posy -= 1;
+			}
+			//if is not, ill try right, left then the opposite direction up
+			else {
+				//try right
+				if (grid.NodeInXY (posx+1, posy).walkable){
+					posx += 1;
+				}
+				//if impossible try left
+				else if(grid.NodeInXY (posx-1, posy).walkable){
+					posx -= 1;
+				}
+				//if impossible try up
+				else if(grid.NodeInXY (posx, posy+1).walkable){
+					posy += 1;				
+				}
+				//if all this fails it means the hero is surrounded, not aproaching is fine rly
+			}
+		} 
+		//if is best to aproach from above
+		else if (startNode.gridY > targettNode.gridY && grid.NodeInXY(posx,posy+1).walkable){
+			//And the tile is available!
+			if (grid.NodeInXY (posx, posy+1).walkable) {
+				posy += 1;
+			}
+			//if is not, ill try right, left then the opposite direction down
+			else {
+				//try right
+				if (grid.NodeInXY (posx+1, posy).walkable){
+					posx += 1;
+				}
+				//if impossible try left
+				else if(grid.NodeInXY (posx-1, posy).walkable){
+					posx -= 1;
+				}
+				//if impossible try down
+				else if(grid.NodeInXY (posx, posy-1).walkable){
+					posy -= 1;				
+				}
+				//if all this fails it means the hero is surrounded, not aproaching is fine rly
+			}
 		}
 
-		Node targetNode = grid.NodeInXY (posx,posy);
+		return new Vector2 (posx, posy);
+	}
+
+	public List<Node> FindEnemyPath(Node startNode, Node targettNode){
+		//target node must be -1 from destiny, and the closest one to the target
+
+		Vector2 posxposy = chooseAdjacent (startNode,targettNode);
+
+		Node targetNode = grid.NodeInXY ((int)posxposy.x,(int)posxposy.y);
 
 		List<Node> openSet = new List<Node> ();
 		HashSet<Node> closedSet = new HashSet<Node> ();
@@ -162,7 +252,7 @@ public class Pathfinder : MonoBehaviour {
 
 	public bool isMeele(Node a, Node b){
 		int calc = (a.gridX - b.gridX) + (a.gridY - b.gridY);
-		Debug.Log ("Calc = "+calc);
+		//Debug.Log ("Calc = "+calc);
 		if(calc == 1 || calc == -1){
 			return true;
 		}

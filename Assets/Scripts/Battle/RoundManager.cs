@@ -118,9 +118,15 @@ public class RoundManager : MonoBehaviour {
 
 	void AdvancePathing(){
 
-		//Implement teleport to righ pos here
+		//Makes the block the hero was standing walkable
+		grid.NodeInXY(activeHero.gridPosX,activeHero.gridPosY).walkable = true;
+
+
 		activeHero.transform.position = path[0].worldPosition;
 		activeHero.gridPosX = path [0].gridX; activeHero.gridPosY = path [0].gridY;
+		//Makes the block the hero is standing on right now unwalkable
+		grid.NodeInXY(activeHero.gridPosX,activeHero.gridPosY).walkable = false;
+
 		activeHero.mp -= 1;
 		GameObject.Find (activeHero.heroName+"LifeBar").SendMessage("SetMP", (activeHero.mp));
 		GameObject.Find ("GreatBar").SendMessage ("SetMP", activeHero.mp);
@@ -153,16 +159,26 @@ public class RoundManager : MonoBehaviour {
 		}
 	}
 	void EnemyMove(){
-		if (activeEnemy.path.Count == 0 || activeEnemy.mp == 0) {
+		if (activeEnemy.path == null || activeEnemy.path.Count == 0 || activeEnemy.mp == 0) {
 			stateMach = 0;
 			activeEnemy.path = null;
 
 			return;
 		}
-		activeEnemy.gridPosX = activeEnemy.path [0].gridX;
-		activeEnemy.gridPosY = activeEnemy.path [0].gridY;
+		//moving animation:
 		activeEnemy.transform.position = Vector3.Lerp (activeEnemy.transform.position,activeEnemy.path[0].worldPosition, 5f * Time.deltaTime);
 		if (Vector3.Distance(activeEnemy.transform.position, activeEnemy.path[0].worldPosition)<0.1f){
+
+			//Make the square the enemy was before walkable
+			grid.NodeInXY(activeEnemy.gridPosX,activeEnemy.gridPosY).walkable = true;
+
+			//update enemy pos in the grid
+			activeEnemy.gridPosX = activeEnemy.path [0].gridX;
+			activeEnemy.gridPosY = activeEnemy.path [0].gridY;
+
+			//Make the grid enemy is on unwalkable.
+			grid.NodeInXY(activeEnemy.gridPosX,activeEnemy.gridPosY).walkable = false;
+
 			activeEnemy.transform.position = activeEnemy.path[0].worldPosition;
 			activeEnemy.mp -= 1;
 
