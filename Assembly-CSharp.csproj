@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Battle\AI.cs" />
+     <Compile Include="Assets\Scripts\Battle\ActButtomControl.cs" />
      <Compile Include="Assets\Scripts\Battle\EndTurnButtomControl.cs" />
      <Compile Include="Assets\Scripts\Battle\GreatBarControl.cs" />
      <Compile Include="Assets\Scripts\Battle\LifeBarControl.cs" />

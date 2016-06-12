@@ -3,13 +3,17 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkillButtomControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
+public class SkillButtomControl : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
 
 	public GameObject tooltip;
 	Skill skill;
 	GameObject go;
 
-
+	#region IPointerClickHandler implementation
+	public void OnPointerClick (PointerEventData eventData){
+		GameObject.Find ("Judge").SendMessage ("SetActiveSkill", skill);
+	}
+	#endregion
 
 
 	public void OnPointerEnter(PointerEventData eventData){

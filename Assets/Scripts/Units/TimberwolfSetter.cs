@@ -4,13 +4,14 @@ using System.Collections;
 public class TimberwolfSetter : MonoBehaviour {
 
 	Enemy timberwolf;
-
+	public Texture avatar;
 	int hitPoints, ap, mp, init, damage, range, APCost;
 	bool phaseWall, lazerShot;
 	string enemyName, enemyAI, effect, tooltip;
 
 	void Awake(){
 		timberwolf = GetComponent<Enemy> ();
+
 		setStatus ();
 	}
 
@@ -23,6 +24,6 @@ public class TimberwolfSetter : MonoBehaviour {
 		init = 50;
 
 
-		timberwolf.initializeEnemy(enemyName, hitPoints, ap, mp, init);
+		timberwolf.initializeEnemy(enemyName, avatar, hitPoints, ap, mp, init);
 	}
 }

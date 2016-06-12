@@ -7,6 +7,8 @@ public class Hero : MonoBehaviour {
 	//to me called by the GUI to display the life bar
 	public Texture avatar;
 	public List<Skill> skillList = new List<Skill>();
+	public Skill activeSkill;
+	public Enemy activeTarget;
 	public int hitPoints, totalHitPoints, ap, totalAP, mp, totalMP, init, gridPosX, gridPosY;
 
 

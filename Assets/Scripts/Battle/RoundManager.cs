@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class RoundManager : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class RoundManager : MonoBehaviour {
 	public List<Hero> heroList;
 	public List<Enemy> enemyList;
 	public GameObject moveButtom;
-	public GameObject LifeBar;
+	public GameObject LifeBar, EnemyPanel;
 	GameObject GreatBar;
 	public Hero activeHero;
 	public Enemy activeEnemy;
@@ -27,6 +28,7 @@ public class RoundManager : MonoBehaviour {
 		ReceiveListOfHeroes ();
 		ReceiveListOfEnemies ();
 		InitializeLifeBars ();
+		SpawnEnemyPanel ();
 	}
 
 	void ReceiveListOfHeroes(){
@@ -51,6 +53,23 @@ public class RoundManager : MonoBehaviour {
 		}
 	}
 
+	void SpawnEnemyPanel(){
+		for (int i = 0; i<=enemyList.Count;i++){
+			Destroy ( GameObject.Find( "EnemyPanel" + i ) );
+		}
+		Vector3 pos = new Vector3 (-33,128,0);
+		for(int i = 0; i<enemyList.Count; i++){
+			GameObject go = (GameObject)Instantiate (EnemyPanel, pos, Quaternion.identity);
+			pos = new Vector3 (-21, pos.y + 40, 0);
+			if (i > 0) {
+				go.transform.localScale = new Vector3 (0.25f, 0.25f, 0.25f);
+			}
+			go.transform.SetParent (GameObject.Find("Canvas").transform, false);
+			go.transform.GetChild (0).GetComponent<RawImage>().texture = enemyList[i].avatar;
+			go.name = "EnemyPanel" + i;
+		}
+	}
+
 	void Update () {
 		if (newTurn) {
 			updateCamera ();
@@ -65,6 +84,31 @@ public class RoundManager : MonoBehaviour {
 		}
 		paintTheWay (path);
 	}
+
+	//HERO ACTION SECTION START
+
+	public void StartHeroAction(){
+		if(activeHero.activeSkill == null || activeHero.activeTarget == null){
+			return;
+		}
+		Node heroNode = grid.NodeInXY (activeHero.gridPosX,activeHero.gridPosY);
+		Node enemyNode = grid.NodeInXY (activeHero.activeTarget.gridPosX, activeHero.activeTarget.gridPosY);
+		if (pf.hasLineOfSight (heroNode, enemyNode, activeHero.activeSkill)) {
+			Debug.Log ("Pew");
+		}
+	}
+
+	public void SetActiveSkill(Skill skill){
+		activeHero.activeSkill = skill;
+	}
+
+	public void SetActiveTarget(Enemy enemy){
+		activeHero.activeTarget = enemy;
+		updateGUI ();
+	}
+
+	//HERO ACTION SECTION ENDS
+
 	//HERO MOVE SECTION
 	void ReceiveMove(Vector2 xy){
 		if (!HeroTurn()) {
@@ -240,13 +284,14 @@ public class RoundManager : MonoBehaviour {
 			go.SendMessage ("SetMP", heroList[i].totalMP);
 			float a = heroList [i].hitPoints; float b = heroList [i].totalHitPoints;
 			go.SendMessage ("SetFill", (a/b));
+		}
+		SpawnEnemyPanel ();
 
-			if (HeroTurn ()) {
-				GreatBar.GetComponent<RectTransform> ().position = new Vector3 (637, 49.7f,0);
-				updateGreatBar ();
-			} else {
-				GreatBar.gameObject.transform.position = new Vector3(700,700,0);
-			}
+		if (HeroTurn ()) {
+			GreatBar.GetComponent<RectTransform> ().position = new Vector3 (637, 49.7f,0);
+			updateGreatBar ();
+		} else {
+			GreatBar.gameObject.transform.position = new Vector3(700,700,0);
 		}
 	}
 	void updateGreatBar(){
@@ -260,6 +305,8 @@ public class RoundManager : MonoBehaviour {
 		float a = activeHero.hitPoints; float b = activeHero.totalHitPoints;
 		GreatBar.SendMessage ("SetFill", (a/b));
 		GreatBar.SendMessage ("SetSkillBar", activeHero);
+		if (activeHero.activeTarget != null)
+			GreatBar.SendMessage ("SetTarget", activeHero.activeTarget.avatar);
 	}
 	bool HeroTurn(){
 		if (activeHero != null) {

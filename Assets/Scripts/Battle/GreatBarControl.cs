@@ -6,6 +6,10 @@ public class GreatBarControl : MonoBehaviour {
 
 	public GameObject skillPrefab;
 
+	public void SetTarget(Texture enemyAvatar){
+		transform.GetChild (4).transform.GetChild (0).GetComponent<RawImage> ().texture = enemyAvatar;	
+	}
+
 	public void SetAvatar(Texture avatar){
 		transform.GetChild (0).GetComponent<RawImage> ().texture = avatar;
 	}

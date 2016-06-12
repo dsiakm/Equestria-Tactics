@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour, IPointerClickHandler {
 
 	public string enemyName;
 	public Hero targetHero;
@@ -14,6 +15,12 @@ public class Enemy : MonoBehaviour {
 	public AI ai;
 	public int hitPoints, totalHitPoints, ap, totalAP, mp, totalMP, init, gridPosX, gridPosY;
 
+	#region IPointerClickHandler implementation
+	public void OnPointerClick (PointerEventData eventData){
+		GameObject.Find ("Judge").SendMessage ("SetActiveTarget", this);
+	}
+	#endregion
+
 	public void resetAPMP(){
 		ap = totalAP;
 		mp = totalMP;
@@ -23,7 +30,7 @@ public class Enemy : MonoBehaviour {
 		skillList.Add (skill);
 	}
 
-	public void initializeEnemy(string enemyName, int hitPoints, int ap, int mp, int init){
+	public void initializeEnemy(string enemyName, Texture avatar, int hitPoints, int ap, int mp, int init){
 		this.enemyName = enemyName;
 		this.hitPoints = hitPoints;
 		this.ap = ap;
@@ -31,6 +38,7 @@ public class Enemy : MonoBehaviour {
 		this.mp = mp;
 		this.totalMP = mp;
 		this.init = init;
+		this.avatar = avatar;
 		ai = GetComponent<AI> ();
 	}
 

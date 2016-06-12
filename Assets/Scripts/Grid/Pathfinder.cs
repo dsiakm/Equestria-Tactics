@@ -212,7 +212,9 @@ public class Pathfinder : MonoBehaviour {
 		return dstX + dstY;
 	}
 
-	public bool hasLineOfSight(Node startNode, Node targetNode, bool ignoreWall, int castRange){
+	public bool hasLineOfSight(Node startNode, Node targetNode, Skill skill){
+		bool ignoreWall = skill.phaseWall, lazerShot = skill.lazerShot; 
+		int castRange = skill.range;
 		Node currentNode; int x=0, y = 0;
 		List<Node> los = new List<Node>();
 
@@ -220,15 +222,24 @@ public class Pathfinder : MonoBehaviour {
 		currentNode = startNode;
 		x = currentNode.gridX;
 		y = currentNode.gridY;
+
+		//Check if applies to lazer here.
+		if(lazerShot){
+			//If X and Y differs at the same time, than they are not in lazer pos.
+			if (startNode.gridX != targetNode.gridX && startNode.gridY != targetNode.gridY){
+				return false;
+			}
+		}
+
 		while (currentNode != targetNode){
 			if (currentNode.gridX < targetNode.gridX) {
 				x++;
-			} else {
+			} else if (currentNode.gridX > targetNode.gridX) {
 				x--;
 			}
 			if (currentNode.gridY < targetNode.gridY) {
 				y++;
-			} else {
+			} else if (currentNode.gridY > targetNode.gridY) {
 				y--;
 			}
 
