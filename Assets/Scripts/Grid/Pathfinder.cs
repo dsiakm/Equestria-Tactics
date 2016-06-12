@@ -244,10 +244,11 @@ public class Pathfinder : MonoBehaviour {
 			}
 
 			currentNode = grid.NodeInXY (x, y);
-			los.Add (currentNode);
+			if (currentNode != targetNode)
+				los.Add (currentNode);
 		}
 
-		if (los.Count > castRange) {
+		if (los.Count+1 > castRange) {
 			return false;
 		}
 		if (ignoreWall) {
@@ -255,6 +256,7 @@ public class Pathfinder : MonoBehaviour {
 		}
 		for(int i=0; i<los.Count;i++){
 			if (!los[i].walkable){
+				Debug.Log ("NO LOS at: x: " + los[i].gridX +" y: "+los[i].gridY);
 				return false;
 			}
 		}

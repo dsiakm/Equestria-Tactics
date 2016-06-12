@@ -10,14 +10,14 @@ public class RoundManager : MonoBehaviour {
 	public List<Hero> heroList;
 	public List<Enemy> enemyList;
 	public GameObject moveButtom;
-	public GameObject LifeBar, EnemyPanel;
+	public GameObject LifeBar, EnemyPanel, Damage;
 	GameObject GreatBar;
 	public Hero activeHero;
 	public Enemy activeEnemy;
 	public Pathfinder pf;
 	public Grid grid;
 	bool newTurn = true; 
-	bool moveHero = false;
+	bool moveHero = false, actHero;
 
 	//state machine aux variables
 	int stateMach;
@@ -79,6 +79,11 @@ public class RoundManager : MonoBehaviour {
 		if (moveHero) {
 			MoveHero ();		
 		}
+		if (actHero) {
+			if(activeHero.activeSkill.effect == "hook"){
+				HookProcedure ();
+			}
+		}
 		if (activeEnemy!=null){
 			EnemyStateMachine ();
 		}
@@ -88,13 +93,25 @@ public class RoundManager : MonoBehaviour {
 	//HERO ACTION SECTION START
 
 	public void StartHeroAction(){
+		//Does the Hero have a activeSkill and a activeTarget?
 		if(activeHero.activeSkill == null || activeHero.activeTarget == null){
 			return;
 		}
+		//Does the Hero have enough AP do execute the action?
+		if(activeHero.activeSkill.APCost > activeHero.ap){
+			return;
+		}
+
 		Node heroNode = grid.NodeInXY (activeHero.gridPosX,activeHero.gridPosY);
 		Node enemyNode = grid.NodeInXY (activeHero.activeTarget.gridPosX, activeHero.activeTarget.gridPosY);
 		if (pf.hasLineOfSight (heroNode, enemyNode, activeHero.activeSkill)) {
-			Debug.Log ("Pew");
+			actHero = true;
+			activeHero.ap -= activeHero.activeSkill.APCost;
+			int damage = activeHero.activeSkill.DoDamage ();
+			activeHero.activeTarget.hitPoints -= damage;
+			GameObject go = (GameObject)Instantiate (Damage, Vector3.zero,Quaternion.identity);
+			go.SendMessage ("AppearOnEnemyGreatBar",damage);
+			updateGUI ();
 		}
 	}
 
@@ -107,7 +124,50 @@ public class RoundManager : MonoBehaviour {
 		updateGUI ();
 	}
 
+
+
 	//HERO ACTION SECTION ENDS
+
+	//HERO MANY MANY PROCEDURES STARTS
+			void HookProcedure(){
+				int x=activeHero.gridPosX, y=activeHero.gridPosY;
+
+				if (activeHero.gridPosX < activeHero.activeTarget.gridPosX) {
+					x++;
+				} else if (activeHero.gridPosX > activeHero.activeTarget.gridPosX) {
+					x--;
+				} else if (activeHero.gridPosY < activeHero.activeTarget.gridPosY) {
+					y++;
+				} else if (activeHero.gridPosY > activeHero.activeTarget.gridPosY){
+					y--;
+				}
+
+				Node destNode = grid.NodeInXY (x,y);
+
+				activeHero.activeTarget.transform.position = Vector3.Lerp (activeHero.activeTarget.transform.position, destNode.worldPosition, 5f * Time.deltaTime);
+
+				//Once is close enough to finish the procedure
+				if (Vector3.Distance(activeHero.activeTarget.transform.position, destNode.worldPosition)<0.1f){
+
+					//The node the enemy was is now walkable
+					Node nodeEnemyWas = grid.NodeInXY (activeHero.activeTarget.gridPosX,activeHero.activeTarget.gridPosY);
+					nodeEnemyWas.walkable = true;
+
+					//get node enemy is in
+					//this node is now unwalkable
+					destNode.walkable = false;
+					//update enemy pos in the grid
+					activeHero.activeTarget.gridPosX = destNode.gridX; activeHero.activeTarget.gridPosY = destNode.gridY; 
+					//finish the acting
+					actHero = false;
+
+					Debug.Log ("x: "+destNode.gridX+" y: "+destNode.gridY);
+
+				}
+
+			}
+
+	//HERO MANY MANY PROCEDURES FINALLY ENDS
 
 	//HERO MOVE SECTION
 	void ReceiveMove(Vector2 xy){
@@ -280,8 +340,8 @@ public class RoundManager : MonoBehaviour {
 	void updateGUI(){
 		for(int i = 0; i<heroList.Count;i++){
 			GameObject go = GameObject.Find (heroList[i].heroName+"LifeBar");
-			go.SendMessage ("SetAP", heroList[i].totalAP);
-			go.SendMessage ("SetMP", heroList[i].totalMP);
+			go.SendMessage ("SetAP", heroList[i].ap);
+			go.SendMessage ("SetMP", heroList[i].ap);
 			float a = heroList [i].hitPoints; float b = heroList [i].totalHitPoints;
 			go.SendMessage ("SetFill", (a/b));
 		}

@@ -17,4 +17,8 @@ public class Skill : MonoBehaviour {
 		this.lazerShot = lazerShot;
 		this.tooltip = tooltip;
 	}
+
+	public int DoDamage(){
+		return (int) Random.Range (damage/2,damage*2);
+	}
 }
