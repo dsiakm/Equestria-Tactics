@@ -24,6 +24,8 @@ public class AI : MonoBehaviour {
 
 	//TImberwolf gets close and attack, and that is all
 	int DecideTimberWolf(List<Hero> heroList){
+		//always get the target closest
+		enemy.targetHero = null;
 		if(enemy.targetHero == null){
 			enemy.targetHero = heroList [0];
 			for(int i=0; i<heroList.Count;i++){
@@ -44,6 +46,12 @@ public class AI : MonoBehaviour {
 			enemy.path = pf.FindEnemyPath (nodeEnemy, nodeHero);
 			//path is set now tell the Judge to move your piece until your mp runs out!
 			return 1;
+		}
+		//if in meele and enough AP to do a AutoAttack, timberwolf uses a basic attack
+		else if( pf.isMeele(nodeEnemy,nodeHero) && enemy.ap >= enemy.skillList[0].APCost){
+			enemy.choosenSkill = enemy.skillList [0];
+			//return the state of attacking
+			return 2;
 		}
 
 		//nothing more to do, end my turn

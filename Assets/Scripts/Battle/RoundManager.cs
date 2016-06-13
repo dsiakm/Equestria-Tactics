@@ -72,6 +72,10 @@ public class RoundManager : MonoBehaviour {
 
 	void Update () {
 		if (newTurn) {
+
+			WhoDied ();
+			EndBattle ();
+
 			updateCamera ();
 			updateGUI ();
 			newTurn = false;
@@ -257,6 +261,11 @@ public class RoundManager : MonoBehaviour {
 			Debug.Log ("Stato 1");
 			EnemyMove ();
 		}
+		else if(stateMach == 2){
+			Debug.Log ("Stato 2");
+			EnemyAct ();
+		}
+		//those stateMach is for the many procedures an enemy Attack can cause. Hook, hookshot and what not.
 		else if(stateMach == -1){
 			Debug.Log ("ff");
 			EndEnemyTurn ();
@@ -264,6 +273,7 @@ public class RoundManager : MonoBehaviour {
 	}
 	void EnemyMove(){
 		if (activeEnemy.path == null || activeEnemy.path.Count == 0 || activeEnemy.mp == 0) {
+			activeEnemy.mp = 0;
 			stateMach = 0;
 			activeEnemy.path = null;
 
@@ -291,10 +301,50 @@ public class RoundManager : MonoBehaviour {
 
 	}
 	void EnemyAct(){
+		if (activeEnemy.choosenSkill.effect == "none"){
+			stateMach = 0;
+		}
+		activeEnemy.ap -= activeEnemy.choosenSkill.APCost;
+		int damage = activeEnemy.choosenSkill.DoDamage ();
+		activeEnemy.targetHero.hitPoints -= damage;
+		GameObject go = (GameObject)Instantiate (Damage, Vector3.zero,Quaternion.identity);
+		go.SendMessage ("AppearOnHeroLifeBar",activeEnemy.targetHero.heroName);
+		go.SendMessage ("SetText", damage);
+		updateGUI ();
 	}
 	//ENEMY TURN SECTION END
 
 	//TURN MANAGEMENT START
+
+	void WhoDied(){
+		for(int i=0;i<heroList.Count;i++){
+			if(heroList[i].hitPoints <=0) {
+
+				grid.NodeInXY (heroList [i].gridPosX, heroList [i].gridPosY).walkable = true;
+
+				Destroy (GameObject.Find(heroList [i].heroName));
+				heroList.RemoveAt (i);
+			}
+		}
+		for(int i=0;i<enemyList.Count;i++){
+			if(enemyList[i].hitPoints<=0){
+
+				grid.NodeInXY (enemyList [i].gridPosX, enemyList [i].gridPosY).walkable = true;
+
+				Destroy (GameObject.Find(enemyList [i].name));
+				enemyList.RemoveAt (i);
+			}
+		}
+	}
+
+	void EndBattle(){
+		if (enemyList.Count == 0){
+			Debug.Log ("Victory!");
+		}
+		else if(heroList.Count == 0){
+			Debug.Log ("Defeated!");
+		}
+	}
 
 	public void EndTurnButtom(){
 		if (!HeroTurn()){
@@ -305,6 +355,9 @@ public class RoundManager : MonoBehaviour {
 		//this put the hero who just had her turn to the end of the list
 		heroList.Remove (activeHero);
 		heroList.Add (activeHero);
+
+		WhoDied ();
+
 		nextInLine (true);
 	}
 

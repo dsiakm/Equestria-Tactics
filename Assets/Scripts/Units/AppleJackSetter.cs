@@ -23,7 +23,7 @@ public class AppleJackSetter : MonoBehaviour {
 		icon = Resources.Load ("lassohookicon", typeof(Texture)) as Texture;
 		range = 6;
 		APCost = 3;
-		damage = 2;
+		damage = 20;
 		effect = "hook";
 		phaseWall = false;
 		lazerShot = true;
