@@ -23,7 +23,7 @@ public class RoundManager : MonoBehaviour {
 	int stateMach;
 
 	void Start(){
-		activeCamera = Camera.current;
+		activeCamera = Camera.main;
 		GreatBar = GameObject.Find ("GreatBar");
 		ReceiveListOfHeroes ();
 		ReceiveListOfEnemies ();
@@ -72,10 +72,6 @@ public class RoundManager : MonoBehaviour {
 
 	void Update () {
 		if (newTurn) {
-
-			WhoDied ();
-			EndBattle ();
-
 			updateCamera ();
 			updateGUI ();
 			newTurn = false;
@@ -366,9 +362,13 @@ public class RoundManager : MonoBehaviour {
 		//If it was a hero who ended his turn last time, then a Unit will be made active, otherwise
 		if (wasHero) {
 			activeHero = null;
+			if (enemyList.Count == 0)
+				EndBattle ();
 			activeEnemy = enemyList [0];
 			stateMach = 0;
 		} else {
+			if (heroList.Count == 0)
+				EndBattle ();
 			activeHero = heroList[0];
 			activeEnemy = null;
 			stateMach = 0;
@@ -380,14 +380,18 @@ public class RoundManager : MonoBehaviour {
 		enemyList.Remove (activeEnemy);
 		enemyList.Add (activeEnemy);
 		stateMach = 0;
+
+		WhoDied ();
+		EndBattle ();
+
 		nextInLine (false);
 	}
 
 	void updateCamera(){
 		if (activeHero != null) {
-			//activeCamera.transform.position = new Vector3 (activeHero.transform.position.x, activeHero.transform.position.y, activeCamera.transform.position.z);
+			activeCamera.GetComponent<BattleCamera> ().setLookAt (activeHero.transform);
 		} else {
-			//Center to enemy here
+			activeCamera.GetComponent<BattleCamera> ().setLookAt (activeEnemy.transform);
 		}
 	}
 	void updateGUI(){
