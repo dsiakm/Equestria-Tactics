@@ -83,6 +83,9 @@ public class RoundManager : MonoBehaviour {
 			if(activeHero.activeSkill.effect == "hook"){
 				HookProcedure ();
 			}
+			else if(activeHero.activeSkill.effect == "hookshot"){
+				HookShotProcedure ();
+			}
 		}
 		if (activeEnemy!=null){
 			EnemyStateMachine ();
@@ -159,11 +162,41 @@ public class RoundManager : MonoBehaviour {
 					activeHero.activeTarget.gridPosX = destNode.gridX; activeHero.activeTarget.gridPosY = destNode.gridY; 
 					//finish the acting
 					actHero = false;
-
-					Debug.Log ("x: "+destNode.gridX+" y: "+destNode.gridY);
-
 				}
 
+			}
+			void HookShotProcedure(){
+				int x=activeHero.activeTarget.gridPosX, y=activeHero.activeTarget.gridPosY;
+
+				if (activeHero.gridPosX > activeHero.activeTarget.gridPosX) {
+					x++;
+				} else if (activeHero.gridPosX < activeHero.activeTarget.gridPosX) {
+					x--;
+				} else if (activeHero.gridPosY > activeHero.activeTarget.gridPosY) {
+					y++;
+				} else if (activeHero.gridPosY < activeHero.activeTarget.gridPosY){
+					y--;
+				}
+
+				Node destNode = grid.NodeInXY (x,y);
+
+				activeHero.transform.position = Vector3.Lerp (activeHero.transform.position, destNode.worldPosition, 5f * Time.deltaTime);
+
+				//Once is close enough to finish the procedure
+				if (Vector3.Distance(activeHero.transform.position, destNode.worldPosition)<0.1f){
+
+					//The node the hero was is now walkable
+					Node nodeHeroWas = grid.NodeInXY (activeHero.gridPosX,activeHero.gridPosY);
+					nodeHeroWas.walkable = true;
+
+					//get node hero is in
+					//this node is now unwalkable
+					destNode.walkable = false;
+					//update hero pos in the grid
+					activeHero.gridPosX = destNode.gridX; activeHero.gridPosY = destNode.gridY; 
+					//finish the acting
+					actHero = false;
+				}
 			}
 
 	//HERO MANY MANY PROCEDURES FINALLY ENDS

@@ -17,6 +17,7 @@ public class AppleJackSetter : MonoBehaviour {
 	
 	void setAppleJack(){
 		createLassoHookSkill ();
+		createLassoHookShotSkill ();
 	}
 
 	void createLassoHookSkill(){
@@ -29,6 +30,22 @@ public class AppleJackSetter : MonoBehaviour {
 		lazerShot = true;
 		tooltip = 	"Applejack throws her lasso at the enemy the way only a cowgirl can! " +
 					"She also slaps the enemy when it arives just for kicks!";
+
+
+		Skill newSkill = new Skill(icon, damage, effect, range, APCost, phaseWall, lazerShot, tooltip);
+		applejack.addSkill (newSkill);
+	}
+
+	void createLassoHookShotSkill(){
+		icon = Resources.Load ("lassohookshoticon", typeof(Texture)) as Texture;
+		range = 6;
+		APCost = 3;
+		damage = 20;
+		effect = "hookshot";
+		phaseWall = false;
+		lazerShot = true;
+		tooltip = 	"Applejack throws her lasso at the enemy and pulls herself! " +
+			"She also arrives with a kick! Ha!";
 
 
 		Skill newSkill = new Skill(icon, damage, effect, range, APCost, phaseWall, lazerShot, tooltip);
