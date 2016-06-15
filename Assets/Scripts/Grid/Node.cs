@@ -17,7 +17,7 @@ public class Node {
 
 	public Node (bool walkable, Vector3 worldPosition, int gridX, int gridY){
 		this.walkable = walkable;
-		this.worldPosition = worldPosition;
+		this.worldPosition = worldPosition + new Vector3(0,1.1f,0);
 
 		this.gridX = gridX;
 		this.gridY = gridY;

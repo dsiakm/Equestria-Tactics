@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BattleCamera : MonoBehaviour {
 
-	const float yAngleMin = 0f, yAngleMax = 90f;
+	const float yAngleMin = 0f, yAngleMax = 89.9f;
 
 	public Transform lookAt;
 	public Transform camTransform;

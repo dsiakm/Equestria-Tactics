@@ -17,7 +17,7 @@ public class RoundManager : MonoBehaviour {
 	public Pathfinder pf;
 	public Grid grid;
 	bool newTurn = true; 
-	bool moveHero = false, actHero;
+	bool moveHero = false, updateAnin=true, actHero;
 
 	//state machine aux variables
 	int stateMach;
@@ -203,6 +203,7 @@ public class RoundManager : MonoBehaviour {
 
 	public void StartMovingHeroButtom(){
 		moveHero = true;
+		activeHero.GetComponent<Animator> ().SetBool ("move", true);
 	}
 
 	void MoveHero(){
@@ -210,17 +211,42 @@ public class RoundManager : MonoBehaviour {
 			moveHero = false;
 			path = null;
 			activateMoveButton (false);
-
+			activeHero.GetComponent<Animator> ().SetBool ("move", false);
+			activeHero.GetComponent<SpriteRenderer> ().flipX = false;
 			return;
 		}
-		//activeHero.gridPosX = path [0].gridX; activeHero.gridPosY = path [0].gridY;
-		activeHero.transform.position = Vector3.Lerp (activeHero.transform.position,path[0].worldPosition, 5f * Time.deltaTime);
+		//find with animation to call
+		updateAnimator();
+		activeHero.transform.position = Vector3.Lerp (activeHero.transform.position,path[0].worldPosition, 4f * Time.deltaTime);
 		if (Vector3.Distance(activeHero.transform.position, path[0].worldPosition)<0.1f){
 			AdvancePathing ();
 		}
 	}
 
+	void updateAnimator(){
+		if (updateAnin) {
+
+			if( activeHero.gridPosX < path[0].gridX ){
+				activeHero.GetComponent<Animator> ().SetInteger ("side",1);
+				activeHero.GetComponent<SpriteRenderer> ().flipX = true;
+			}else if( activeHero.gridPosX > path[0].gridX ){
+				activeHero.GetComponent<Animator> ().SetInteger ("side",1);
+				activeHero.GetComponent<SpriteRenderer> ().flipX = false;
+			}else if( activeHero.gridPosY < path[0].gridY ){
+				activeHero.GetComponent<Animator> ().SetInteger ("side",2);
+				activeHero.GetComponent<SpriteRenderer> ().flipX = false;
+			}else if ( activeHero.gridPosY > path[0].gridY ){
+				activeHero.GetComponent<Animator> ().SetInteger ("side",3);
+				activeHero.GetComponent<SpriteRenderer> ().flipX = false;
+			}
+
+			updateAnin = false;
+		}
+	}
+
 	void AdvancePathing(){
+		updateAnin = true;
+		//activeHero.GetComponent<SpriteRenderer> ().flipX = false;
 
 		//Makes the block the hero was standing walkable
 		grid.NodeInXY(activeHero.gridPosX,activeHero.gridPosY).walkable = true;

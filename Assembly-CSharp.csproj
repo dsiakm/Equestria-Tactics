@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\Battle\EndTurnButtomControl.cs" />
      <Compile Include="Assets\Scripts\Battle\GreatBarControl.cs" />
      <Compile Include="Assets\Scripts\Battle\LifeBarControl.cs" />
+     <Compile Include="Assets\Scripts\Battle\LookAtCamera.cs" />
      <Compile Include="Assets\Scripts\Battle\MoveButtomControl.cs" />
      <Compile Include="Assets\Scripts\Battle\RoundManager.cs" />
      <Compile Include="Assets\Scripts\Battle\SkillButtomControl.cs" />
