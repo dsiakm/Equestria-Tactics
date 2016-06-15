@@ -18,4 +18,14 @@ public class ClickableNode : MonoBehaviour, IPointerClickHandler {
 		GameObject.Find ("Judge").SendMessage ("ReceiveMove", new Vector2(gridX, gridY));
 	}
 	#endregion
+
+	public void SetColor(int paint){
+		if (paint == 2) {
+			GetComponent<Renderer> ().material.SetColor ("_Color", Color.cyan);
+		}else if(paint == 3){
+			GetComponent<Renderer> ().material.SetColor ("_Color", Color.red);
+		}else {
+			GetComponent<Renderer> ().material.SetColor ("_Color", Color.green);
+		}
+	}
 }

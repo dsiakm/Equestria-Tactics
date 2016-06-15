@@ -12,7 +12,7 @@ public class Grid : MonoBehaviour {
 	Node[,] grid;
 
 	float nodeDiameter;
-	int gridSizeX, gridSizeY;
+	public int gridSizeX, gridSizeY;
 
 	void Awake(){
 		nodeDiameter = nodeRadius * 2;
@@ -92,6 +92,7 @@ public class Grid : MonoBehaviour {
 				bool walkable = !(Physics.CheckSphere(worldPoint,nodeRadius, unwalkableMask));
 				grid [x, y] = new Node (walkable, worldPoint,x,y);
 				GameObject go = (GameObject)Instantiate (grassPrefab, worldPoint, Quaternion.identity);
+				go.name = "x" + x + "y" + y;
 				go.GetComponent<ClickableNode> ().setXY (x, y);
 				go.transform.SetParent (GameObject.Find("Plane").transform, true);
 			}

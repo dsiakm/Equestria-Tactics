@@ -87,7 +87,6 @@ public class RoundManager : MonoBehaviour {
 		if (activeEnemy!=null){
 			EnemyStateMachine ();
 		}
-		paintTheWay (path);
 	}
 
 	//HERO ACTION SECTION START
@@ -177,6 +176,7 @@ public class RoundManager : MonoBehaviour {
 		Node receivedNode = grid.NodeInXY ((int)xy.x, (int)xy.y);
 		Node heroNode = grid.NodeInXY(activeHero.gridPosX, activeHero.gridPosY);
 		path = pf.FindPath (heroNode, receivedNode);
+		paintTheWay ();
 		if (path != null) {
 			if (path.Count <= activeHero.mp) {
 				activateMoveButton (true);
@@ -187,8 +187,21 @@ public class RoundManager : MonoBehaviour {
 			activateMoveButton (false);
 		}
 	}
-	void paintTheWay(List<Node> path){
+	void paintTheWay(){
 
+		for(int x = 0; x<grid.gridSizeX;x++){
+			for(int y = 0; y<grid.gridSizeY; y++){
+				GameObject.Find ("x"+x+"y"+y).SendMessage ("SetColor", 1);
+			}
+		}
+
+		for (int i = 0; i < path.Count; i++) {
+			if (i < activeHero.mp) {
+				GameObject.Find ("x" + path [i].gridX + "y" + path [i].gridY).SendMessage ("SetColor", 2);
+			} else {
+				GameObject.Find ("x" + path [i].gridX + "y" + path [i].gridY).SendMessage ("SetColor", 3);
+			}
+		}
 	}
 	void activateMoveButton(bool active){
 		if (active) {
@@ -209,10 +222,11 @@ public class RoundManager : MonoBehaviour {
 	void MoveHero(){
 		if (path.Count == 0) {
 			moveHero = false;
-			path = null;
 			activateMoveButton (false);
 			activeHero.GetComponent<Animator> ().SetBool ("move", false);
 			activeHero.GetComponent<SpriteRenderer> ().flipX = false;
+			paintTheWay ();
+			path = null;
 			return;
 		}
 		//find with animation to call
