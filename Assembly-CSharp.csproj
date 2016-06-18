@@ -57,6 +57,8 @@
      <Compile Include="Assets\Scripts\Battle\RoundManager.cs" />
      <Compile Include="Assets\Scripts\Battle\SkillButtomControl.cs" />
      <Compile Include="Assets\Scripts\Battle\Skills\Skill.cs" />
+     <Compile Include="Assets\Scripts\Cinematics\Chatbox.cs" />
+     <Compile Include="Assets\Scripts\Cinematics\CinematicChapterOne.cs" />
      <Compile Include="Assets\Scripts\Grid\ClickableNode.cs" />
      <Compile Include="Assets\Scripts\Grid\Grid.cs" />
      <Compile Include="Assets\Scripts\Grid\Node.cs" />
